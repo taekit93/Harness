@@ -12,6 +12,15 @@ export function countPendingQuestions(taskPath) {
 export function shouldBlock(pipeline, pendingCount = 0) {
   if (!pipeline) return { block: false };
   if (!pipeline.active) return { block: false };
+
+  // 머지 불가 상태: 테스트 실패 → 머지 시도 차단
+  if (pipeline.mergeable === false) {
+    return {
+      block: true,
+      reason: `테스트가 실패했습니다. worktree(${pipeline.worktreePath || '경로 미설정'})에서 테스트를 수정하고 통과시킨 후 머지하세요.`,
+    };
+  }
+
   if (pipeline.verified) return { block: false };
 
   // plan 단계: [미결] 항목이 있으면 차단

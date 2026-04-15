@@ -54,3 +54,16 @@ test('design 단계 + 승인 완료 → 파이프라인 미완료로 차단', ()
   assert.equal(result.block, true);
   assert.ok(result.reason.includes('design'));
 });
+
+test('mergeable false → 머지 차단', () => {
+  const pipeline = { active: true, stage: 'verify', verified: false, mergeable: false, worktreePath: '.worktrees/test' };
+  const result = shouldBlock(pipeline, 0);
+  assert.equal(result.block, true);
+  assert.ok(result.reason.includes('테스트가 실패'));
+});
+
+test('mergeable false + verified true → 여전히 차단 (테스트 실패가 우선)', () => {
+  const pipeline = { active: true, stage: 'verify', verified: true, mergeable: false };
+  const result = shouldBlock(pipeline, 0);
+  assert.equal(result.block, true);
+});
