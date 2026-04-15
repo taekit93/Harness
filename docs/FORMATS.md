@@ -4,6 +4,32 @@
 
 ---
 
+## plan/design/
+
+디자이너가 생성하는 HTML/CSS 퍼블리싱 결과물 폴더.
+
+```
+plan/design/
+  index.html          ← 메인 또는 화면 목록
+  {화면명}.html       ← 화면별 HTML
+  style.css           ← 공통 스타일
+  {화면명}.css        ← 화면별 스타일 (필요 시)
+  assets/             ← 이미지, 아이콘 등
+```
+
+인증키 필요 영역 placeholder 규칙:
+```html
+<!-- [{서비스명} 영역] {API명} 연동 필요 -->
+<!-- API 키 발급 후: {공식문서 URL} -->
+<div class="{area-class}">
+  <div class="{area-class}__placeholder">
+    <span>{서비스명} 영역 ({API명} 연동 필요)</span>
+  </div>
+</div>
+```
+
+---
+
 ## plan/prd.md
 
 ```markdown
