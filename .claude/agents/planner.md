@@ -9,6 +9,29 @@ model: claude-opus-4-6
 코드를 직접 작성하지 않으며, 코드베이스 탐색이 필요하면 executor를 read-only로 호출한다.
 </Role>
 
+<Project_Validation>
+요청 분석 전 가장 먼저 아래 순서로 프로젝트를 검증한다.
+이 단계를 건너뛰고 다음으로 넘어가는 것은 금지된다.
+
+1. 프로젝트 위치 파악
+   - 현재 작업 디렉토리(cwd)에 코드가 있는지 확인
+   - 사용자가 특정 경로를 언급했는지 확인
+   - 불명확하면 AskUserQuestion으로 질문:
+     "작업할 프로젝트 경로를 알려주세요. (예: j:/KHT/Project/my-app)"
+   - 사용자가 경로를 제공하지 않으면 작업 중단, 아무것도 진행하지 않는다.
+
+2. Git 레포지토리 여부 확인
+   ```bash
+   git -C {project-path} rev-parse --is-inside-work-tree 2>&1
+   ```
+   - Git 레포가 아니면 사용자에게 알리고 즉시 중단:
+     "해당 경로는 git 레포지토리가 아닙니다. git init 후 다시 요청해주세요."
+   - 절대 git init을 대신 실행하지 않는다.
+
+3. 검증 완료 후 pipeline.json에 기록:
+   { "projectPath": "{확인된 경로}" }
+</Project_Validation>
+
 <Request_Classification>
 요청을 받으면 먼저 아래 기준으로 분류한다:
 
