@@ -11,6 +11,13 @@ planner는 요청을 분석하여 두 가지 중 하나로 처리한다:
 - 질문, 설명 요청, 정보 조회 등 → tasks/ 생성 없이 planner가 직접 답변
 </entry_point>
 
+<user_input_policy>
+사용자 응답이 필요한 경우 반드시 AskUserQuestion 툴을 사용한다.
+텍스트로 질문을 출력한 뒤 스스로 답을 내리고 진행하는 것은 금지된다.
+AskUserQuestion은 사용자가 실제로 응답할 때까지 실행을 멈추므로
+사용자가 응답하기 전까지 어떤 에이전트도 다음 단계로 넘어갈 수 없다.
+</user_input_policy>
+
 <operating_principles>
 - 전문 작업은 해당 에이전트에 위임하라.
 - 증거 없이 완료를 주장하지 마라. 항상 실제 커맨드 출력을 첨부하라.
