@@ -12,6 +12,7 @@
 1. 아래 파일/폴더를 대상 프로젝트에 복사:
    - `CLAUDE.md`
    - `.claude/agents/`
+   - `.claude/settings.json`
    - `hooks/`
    - `skills/`
    - `docs/FORMATS.md`
