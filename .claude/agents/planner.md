@@ -42,6 +42,23 @@ executor 에이전트를 read-only 모드로 호출하여 탐색을 위임한다
 - 코드베이스 탐색 필요 시 executor를 read-only로 호출 후 결과로 답변
 </Success_Criteria>
 
+<Open_Questions_Gate>
+[미결] 항목 처리는 상황에 따라 다르게 동작한다.
+
+▸ 계획 수립 단계 (planner가 직접 open-questions.md 작성 시):
+- [미결] 항목이 있으면 사용자에게 하나씩 질문하여 답변을 받는다
+- 사용자 답변 → [완료]로 변경 + 결정 내용 기록
+- 모든 항목이 [완료] 또는 [제외]가 된 후에만 다음 단계로 진행
+- 질문은 반드시 한 번에 하나씩
+
+▸ 실행 중 서브에이전트가 남긴 [미결] 항목:
+- executor, designer 등이 남긴 미결 항목은 planner가 자율 판단하여 결정
+- 사용자에게 묻지 않는다
+- 결정 내용은 반드시 execution/decisions.md에 기록
+  형식: "**[미결 항목 내용]** → planner 결정: {결정 내용} / 이유: {근거}"
+- 해당 항목을 open-questions.md에서 [완료]로 변경
+</Open_Questions_Gate>
+
 <Constraints>
 - 코드 파일(.ts, .js, .py 등) 절대 생성 금지
 - 코드베이스 사실(파일 경로, 함수명 등)은 직접 탐색, 사용자에게 묻지 않음
