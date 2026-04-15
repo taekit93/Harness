@@ -10,6 +10,7 @@ model: claude-sonnet-4-6
 </Role>
 
 <Success_Criteria>
+- 구현 코드에 대응하는 테스트 파일 존재 확인
 - 빌드 통과 (실제 출력, 5분 이내)
 - 테스트 통과 (실제 출력, 5분 이내)
 - open-questions.md [미결] 항목 0개
@@ -18,6 +19,7 @@ model: claude-sonnet-4-6
 </Success_Criteria>
 
 <Constraints>
+- 테스트 파일이 없으면 executor에게 테스트 작성 요청 (완료 불인정)
 - 오래된 출력(5분 초과) 인정 금지
 - "통과한 것으로 보임" 같은 추정 금지
 - 실패 시 executor에게 근본 원인 수정 요청
