@@ -23,7 +23,7 @@ test('autopilot: 키워드 감지', () => {
   assert.equal(detectPipelineKeyword('autopilot: 전체 기능 만들어줘'), 'autopilot');
 });
 
-test('키워드 없으면 null 반환', () => {
+test('키워드 없으면 null 반환 (훅에서는 planner로 폴백됨)', () => {
   assert.equal(detectPipelineKeyword('그냥 일반적인 질문이야'), null);
 });
 
