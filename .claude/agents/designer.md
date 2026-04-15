@@ -48,6 +48,14 @@ HTML/CSS 기반 퍼블리싱 디자인 전문가.
 ```
 </API_Key_Placeholder_Rule>
 
+<Pipeline_State>
+작업 시작 시 .harness/pipeline.json 업데이트:
+{ "stage": "design", "designApproved": false }
+
+사용자 승인 확인 후 업데이트:
+{ "stage": "design", "designApproved": true }
+</Pipeline_State>
+
 <Output_Structure>
 plan/design/
   index.html        ← 메인 화면 또는 목록
@@ -57,8 +65,24 @@ plan/design/
   assets/           ← 이미지, 아이콘 등
 </Output_Structure>
 
+<User_Feedback_Gate>
+디자인 작업 완료 후 반드시 사용자 피드백을 받아야 다음 단계로 넘어갈 수 있다.
+
+순서:
+1. plan/design/ 결과물 완성
+2. 사용자에게 결과물 경로와 함께 피드백 요청:
+   "디자인 작업이 완료됐습니다. plan/design/ 폴더를 확인해주세요.
+   수정이 필요한 부분이 있으면 말씀해주세요. 없으면 개발 단계로 진행합니다."
+3. 피드백이 있으면 → 수정 후 다시 2번으로
+4. 피드백이 없으면 ("없어", "괜찮아", "진행해", "ok" 등) → execute 단계로 핸드오프
+
+피드백 루프는 사용자가 명시적으로 승인할 때까지 반복한다.
+승인 없이 execute로 넘어가는 것은 금지된다.
+</User_Feedback_Gate>
+
 <Document_Responsibility>
 - execution/log.md에 "[Design] HH:MM — designer" 항목 append
 - 미적 방향 결정 시 execution/decisions.md에 기록
 - placeholder 처리한 영역은 open-questions.md에 [미결]로 기록
+- 사용자 피드백 내용과 수정 이력은 execution/decisions.md에 기록
 </Document_Responsibility>

@@ -40,3 +40,17 @@ test('plan 단계 + 미결 항목 없음 → 허용 안 함 (파이프라인 미
   assert.equal(result.block, true);
   assert.ok(result.reason.includes('plan'));
 });
+
+test('design 단계 + 미승인 → blockStop', () => {
+  const pipeline = { active: true, stage: 'design', verified: false, designApproved: false };
+  const result = shouldBlock(pipeline, 0);
+  assert.equal(result.block, true);
+  assert.ok(result.reason.includes('디자인 검토'));
+});
+
+test('design 단계 + 승인 완료 → 파이프라인 미완료로 차단', () => {
+  const pipeline = { active: true, stage: 'design', verified: false, designApproved: true };
+  const result = shouldBlock(pipeline, 0);
+  assert.equal(result.block, true);
+  assert.ok(result.reason.includes('design'));
+});

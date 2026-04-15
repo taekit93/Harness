@@ -22,6 +22,14 @@ export function shouldBlock(pipeline, pendingCount = 0) {
     };
   }
 
+  // design 단계: 사용자 승인 없이 넘어가려 하면 차단
+  if (pipeline.stage === 'design' && !pipeline.designApproved) {
+    return {
+      block: true,
+      reason: `디자인 검토가 완료되지 않았습니다. 사용자에게 plan/design/ 결과물을 보여주고 피드백을 받은 후 진행하세요.`,
+    };
+  }
+
   return {
     block: true,
     reason: `파이프라인이 완료되지 않았습니다. 현재 단계: ${pipeline.stage}. verifier로 검증을 완료한 후 종료하세요.`,
