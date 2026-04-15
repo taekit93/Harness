@@ -81,10 +81,16 @@ if (isMain) {
   const messages = [];
 
   const agent = detectPipelineKeyword(prompt);
-  if (agent) messages.push(formatPipelineMessage(agent));
+  if (agent) {
+    // 명시적 파이프라인 키워드가 있으면 해당 에이전트로
+    messages.push(formatPipelineMessage(agent));
+  } else {
+    // 키워드 없어도 항상 planner부터 시작
+    messages.push('[ENTRY] 모든 요청은 planner 에이전트부터 시작합니다. planner를 호출하여 작업성 여부를 판단하세요. 작업성이면 tasks/ 문서를 생성하고, 비작업성이면 직접 답변합니다.');
+  }
 
   const skill = detectSkillKeyword(prompt);
   if (skill) messages.push(formatSkillMessage(skill));
 
-  if (messages.length > 0) process.stdout.write(messages.join('\n'));
+  process.stdout.write(messages.join('\n'));
 }
