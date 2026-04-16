@@ -32,11 +32,27 @@ cd {worktreePath}
 <Success_Criteria>
 - 구현 코드에 대응하는 테스트 파일 존재 확인
 - 빌드 통과 (실제 출력, 5분 이내)
-- 테스트 통과 (실제 출력, 5분 이내)
+- 유닛 테스트 통과 (실제 출력, 5분 이내)
+- E2E 테스트 통과 (UI 포함 작업 시, 실제 출력 첨부)
+- 주요 기능 스크린샷 저장 (E2E_Screenshot 절차 참고)
 - open-questions.md [미결] 항목 0개
 - execution/log.md 모든 단계 기록 확인
 - 실패 시 루프 유지 (verified = false)
 </Success_Criteria>
+
+<E2E_Screenshot>
+E2E 테스트 통과 후 features.md의 P0 항목별로 스크린샷을 저장한다.
+
+**저장 경로:** `{worktreePath}/execution/screenshots/{feature-name}.png`
+
+**캡처 방법 (프레임워크별):**
+- Playwright: `page.screenshot({ path: '...', fullPage: true })`
+- Cypress: `cy.screenshot('feature-name')`
+
+**저장 후:**
+- execution/log.md에 스크린샷 경로 목록을 기록
+- 스크린샷이 1개도 없으면 verified = false 유지 (UI 포함 작업 한정)
+</E2E_Screenshot>
 
 <Constraints>
 - 테스트 파일이 없으면 executor에게 테스트 작성 요청 (완료 불인정)

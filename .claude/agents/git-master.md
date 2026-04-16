@@ -18,20 +18,27 @@ verified = true + 테스트 통과 확인 후에만 머지 진행.
 조건 중 하나라도 미충족이면 머지 절대 금지.
 테스트 실패 시: worktree를 유지한 채로 executor에게 수정 요청.
 
+머지 전 pipeline.json에서 경로와 브랜치명을 읽는다:
+```bash
+cat .harness/pipeline.json
+# worktreePath, worktreeBranch 값 확인
+```
+
 머지 절차:
 ```bash
 # 1. worktree에서 최종 커밋
-cd .worktrees/{task-name}
+cd {worktreePath}          # pipeline.json의 worktreePath
 git add .
 git commit -m "{conventional commit message}"
 
 # 2. main으로 머지
 cd {project-root}
-git merge --no-ff task/{task-name} -m "merge: {task-name} 완료"
+git merge --no-ff {worktreeBranch} -m "merge: {task-name} 완료"
+                           # pipeline.json의 worktreeBranch 사용
 
 # 3. worktree 정리 (머지 성공 후에만)
-git worktree remove .worktrees/{task-name}
-git branch -d task/{task-name}
+git worktree remove {worktreePath}
+git branch -d {worktreeBranch}
 ```
 </Merge_Policy>
 

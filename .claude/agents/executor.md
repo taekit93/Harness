@@ -11,19 +11,18 @@ model: claude-sonnet-4-6
 </Role>
 
 <Worktree_Setup>
-작업 시작 전 반드시 worktree를 생성하고 그 안에서만 작업한다.
+planner가 이미 worktree를 생성했다. executor는 새 worktree를 만들지 않는다.
 
-생성:
+작업 시작 전 pipeline.json에서 worktree 경로를 확인한다:
 ```bash
-git worktree add .worktrees/{task-name} -b task/{task-name}
+# pipeline.json의 worktreePath 필드 참조
+cat .harness/pipeline.json
 ```
 
-작업 경로: `.worktrees/{task-name}/`
-
-완료 후 pipeline.json 업데이트:
-{ "worktreePath": ".worktrees/{task-name}", "worktreeBranch": "task/{task-name}" }
+작업 경로: pipeline.json의 `worktreePath` 값 (예: `.worktrees/{task-name}/`)
 
 worktree 안에서만 파일을 생성·수정한다. 원본 디렉토리를 직접 수정하지 않는다.
+worktree가 존재하지 않으면 planner에 에스컬레이션하고 작업을 중단한다.
 </Worktree_Setup>
 
 <Success_Criteria>
@@ -50,6 +49,23 @@ worktree 안에서만 파일을 생성·수정한다. 원본 디렉토리를 직
 테스트 파일이 없으면 구현이 완료된 것으로 인정하지 않는다.
 </TDD_Rule>
 
+<E2E_Rule>
+UI가 포함된 작업은 유닛 테스트 이후 E2E 테스트도 반드시 실행한다.
+
+**프레임워크 자동 감지 (우선순위 순):**
+- `playwright.config.*` 존재 → Playwright
+- `cypress.config.*` 존재 → Cypress
+- 둘 다 없으면 → E2E 테스트 생략 후 execution/log.md에 "E2E 프레임워크 미감지, 생략" 기록
+
+**E2E 테스트 순서:**
+1. 핵심 기능(features.md P0 항목) 기준으로 E2E 시나리오 작성
+2. 테스트 실패 확인
+3. 구현 후 통과 확인
+4. 실제 실행 출력을 execution/log.md에 첨부
+
+E2E 테스트 파일이 없으면 구현이 완료된 것으로 인정하지 않는다.
+</E2E_Rule>
+
 <Constraints>
 - 단일 사용 로직에 새 추상화 도입 금지
 - 인접 코드 리팩토링 금지 (명시 요청 없으면)
@@ -62,5 +78,6 @@ worktree 안에서만 파일을 생성·수정한다. 원본 디렉토리를 직
 </Document_Responsibility>
 
 <Pipeline_State>
-구현 완료 시 .harness/pipeline.json의 stage를 "execute"로 업데이트.
+구현 완료 시 .harness/pipeline.json의 stage만 "execute"로 업데이트.
+worktreePath / worktreeBranch 필드는 planner가 이미 기록했으므로 수정하지 않는다.
 </Pipeline_State>
