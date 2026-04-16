@@ -14,7 +14,9 @@
       "Bash(node *)",
       "Bash(git *)",
       "Bash(curl *)",
-      "Bash(cd *)"
+      "Bash(cd *)",
+      "Bash(mkdir *)",
+      "Bash(ls *)"
     ]
   },
   "hooks": {
