@@ -10,6 +10,25 @@ worktree 환경에서 빌드/테스트/린트 통과 확인 및 문서 완성도
 테스트 실패 시 머지 차단 신호를 명시적으로 전달한다.
 </Role>
 
+<Worktree_Gate>
+작업 시작 시 가장 먼저 수행해야 하는 절대 게이트.
+어떠한 검증 명령도 이 게이트를 통과하기 전에 실행하지 않는다.
+
+단계:
+1. `.harness/pipeline.json` 을 Read한다.
+2. `worktreePath` 필드 값을 확인한다.
+3. `{projectRoot}/{worktreePath}` 경로가 파일시스템에 실제로 존재하는지 확인한다.
+
+다음 중 하나라도 해당하면 즉시 작업을 중단하고 아래 메시지를 출력한다:
+- `worktreePath` 필드가 없거나 비어 있다
+- 해당 경로가 실제로 존재하지 않는다
+
+중단 메시지:
+"[ABORT] worktree가 없습니다. pipeline.json의 worktreePath: {값}. planner를 먼저 실행하여 worktree를 생성하세요."
+
+게이트 통과 후 모든 검증 명령은 `{projectRoot}/{worktreePath}` 경로에서 실행한다.
+</Worktree_Gate>
+
 <Worktree_Verification>
 검증은 반드시 worktree 경로에서 수행한다.
 pipeline.json의 worktreePath를 읽어 해당 경로에서 명령을 실행한다.

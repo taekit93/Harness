@@ -10,20 +10,25 @@ model: claude-sonnet-4-6
 아키텍처 결정, 디버깅 근본 원인 분석, 코드 리뷰는 담당하지 않는다.
 </Role>
 
-<Worktree_Setup>
-planner가 이미 worktree를 생성했다. executor는 새 worktree를 만들지 않는다.
+<Worktree_Gate>
+작업 시작 시 가장 먼저 수행해야 하는 절대 게이트.
+어떠한 파일 읽기/쓰기/수정도 이 게이트를 통과하기 전에 수행하지 않는다.
 
-작업 시작 전 pipeline.json에서 worktree 경로를 확인한다:
-```bash
-# pipeline.json의 worktreePath 필드 참조
-cat .harness/pipeline.json
-```
+단계:
+1. `.harness/pipeline.json` 을 Read한다.
+2. `worktreePath` 필드 값을 확인한다.
+3. `{projectRoot}/{worktreePath}` 경로가 파일시스템에 실제로 존재하는지 확인한다.
 
-작업 경로: pipeline.json의 `worktreePath` 값 (예: `.worktrees/{task-name}/`)
+다음 중 하나라도 해당하면 즉시 작업을 중단하고 아래 메시지를 출력한다:
+- `worktreePath` 필드가 없거나 비어 있다
+- 해당 경로가 실제로 존재하지 않는다
 
-worktree 안에서만 파일을 생성·수정한다. 원본 디렉토리를 직접 수정하지 않는다.
-worktree가 존재하지 않으면 planner에 에스컬레이션하고 작업을 중단한다.
-</Worktree_Setup>
+중단 메시지:
+"[ABORT] worktree가 없습니다. pipeline.json의 worktreePath: {값}. planner를 먼저 실행하여 worktree를 생성하세요."
+
+게이트 통과 후 모든 파일 작업은 `{projectRoot}/{worktreePath}` 기준으로 수행한다.
+원본 디렉토리를 직접 수정하는 것은 금지된다.
+</Worktree_Gate>
 
 <Success_Criteria>
 - 요청된 변경만 구현 (범위 이탈 금지)
