@@ -53,25 +53,31 @@ cd {worktreePath}
 - 빌드 통과 (실제 출력, 5분 이내)
 - 유닛 테스트 통과 (실제 출력, 5분 이내)
 - E2E 테스트 통과 (UI 포함 작업 시, 실제 출력 첨부)
-- 주요 기능 스크린샷 저장 (E2E_Screenshot 절차 참고)
+- executor가 저장한 스크린샷 존재 검증 (Screenshot_Verification 절차 참고)
 - open-questions.md [미결] 항목 0개
 - execution/log.md 모든 단계 기록 확인
 - 실패 시 루프 유지 (verified = false)
 </Success_Criteria>
 
-<E2E_Screenshot>
-E2E 테스트 통과 후 features.md의 P0 항목별로 스크린샷을 저장한다.
+<Screenshot_Verification>
+executor가 저장한 UI 스크린샷의 존재 여부를 검증한다.
+verifier는 스크린샷을 직접 캡처하지 않는다 — 캡처 책임은 executor에 있다.
 
-**저장 경로:** `{worktreePath}/execution/screenshots/{feature-name}.png`
+**검증 대상:**
+- features.md P0 항목별 최소 1개 스크린샷 파일 존재
 
-**캡처 방법 (프레임워크별):**
-- Playwright: `page.screenshot({ path: '...', fullPage: true })`
-- Cypress: `cy.screenshot('feature-name')`
+**검증 경로:** `{worktreePath}/execution/screenshots/{feature-name}.png`
 
-**저장 후:**
-- execution/log.md에 스크린샷 경로 목록을 기록
-- 스크린샷이 1개도 없으면 verified = false 유지 (UI 포함 작업 한정)
-</E2E_Screenshot>
+**검증 항목:**
+1. `execution/screenshots/` 디렉토리 존재 여부
+2. P0 기능명과 스크린샷 파일명 대응 여부
+3. 파일 크기 0 bytes 여부 (빈 파일 거부)
+
+**검증 결과:**
+- 스크린샷이 0개이면 verified = false 유지 (UI 포함 작업 한정)
+- 누락된 스크린샷이 있으면 executor에게 캡처 요청
+- execution/log.md에 검증 결과 기록
+</Screenshot_Verification>
 
 <Constraints>
 - 테스트 파일이 없으면 executor에게 테스트 작성 요청 (완료 불인정)

@@ -71,6 +71,27 @@ UI가 포함된 작업은 유닛 테스트 이후 E2E 테스트도 반드시 실
 E2E 테스트 파일이 없으면 구현이 완료된 것으로 인정하지 않는다.
 </E2E_Rule>
 
+<UI_Screenshot>
+UI가 포함된 작업은 E2E 테스트 유무와 관계없이 스크린샷 캡처가 필수다.
+
+**캡처 시점:**
+- 구현 완료 후, verifier 핸드오프 전
+
+**대상:**
+- features.md P0 항목별 최소 1장
+
+**저장 경로:** `{worktreePath}/execution/screenshots/{feature-name}.png`
+
+**캡처 방법 (우선순위 순):**
+1. Playwright 단독 스크립트: `npx playwright screenshot {url} --full-page {path}`
+2. Puppeteer 스크립트: `page.screenshot({ path: '...', fullPage: true })`
+3. 위 방법 모두 불가 시 → execution/log.md에 사유를 기록하고 생략 허용
+
+**캡처 후:**
+- execution/log.md에 스크린샷 경로 목록을 기록
+- 스크린샷이 0개이면 구현 완료로 인정하지 않는다 (UI 작업 한정)
+</UI_Screenshot>
+
 <Constraints>
 - 단일 사용 로직에 새 추상화 도입 금지
 - 인접 코드 리팩토링 금지 (명시 요청 없으면)
