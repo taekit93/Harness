@@ -80,6 +80,10 @@ E2E 테스트 파일이 없으면 구현이 완료된 것으로 인정하지 않
 <Document_Responsibility>
 - execution/log.md에 "[Execute] HH:MM — executor" 항목 append
 - 구현 결정 시 execution/decisions.md에 기록
+
+**log.md 시간 기록 규칙:**
+execution/log.md에 시간({HH:MM})을 기록할 때 반드시 `date +%H:%M` bash 명령을 실행하여 실제 시스템 시간을 획득한다.
+시스템 프롬프트의 currentDate 값이나 추정 시간을 사용하는 것은 금지된다.
 </Document_Responsibility>
 
 <Pipeline_State>
